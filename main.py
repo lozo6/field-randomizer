@@ -23,6 +23,15 @@ def get_last_assignments(workers):
 
 
 
+def assign_zones(previous, zones):
+    current = []
+    for i in range(len(previous)):
+        current.append('')
+        current[i] = zones[random.randint(0,len(previous)-1)]
+    while all(val == current[0] for val in current):
+        current[random.randint(0,len(previous)-1)] = zones[random.randint(0,len(previous)-1)]
+    return current
+
 # use all functions
 def main():
     num_of_workers = int(input('How many are present tonight? '))
@@ -32,28 +41,14 @@ def main():
     # print('DEBUG', last assignments)
     if num_of_workers == 3:
         assignments = THREE
-        unit_one = assignments[random.randint(0,2)]
-        unit_two = assignments[random.randint(0,2)]
-        unit_three = assignments[random.randint(0,2)]
-        while unit_two == unit_one or unit_two == unit_three:
-            unit_two = assignments[random.randint(0,2)]
-        while unit_three == unit_one or unit_three == unit_two:
-            unit_three = assignments[random.randint(0,2)]
-        print({
-            present_workers[0]: unit_one,
-            present_workers[1]: unit_two,
-            present_workers[2]: unit_three
-        })
+        assigned_zones = assign_zones(last_assignments, assignments)
+        for i in range(len(present_workers)):
+            print(present_workers[i], assigned_zones[i])
     elif num_of_workers == 2:
         assignments = TWO
-        unit_one = assignments[random.randint(0,1)]
-        unit_two = assignments[random.randint(0,1)]
-        while unit_two == unit_one:
-            unit_two = assignments[random.randint(0,1)]
-        print({
-            present_workers[0]: unit_one,
-            present_workers[1]: unit_two
-        })
+        assigned_zones = assign_zones(last_assignments, assignments)
+        for i in range(len(present_workers)):
+            print(present_workers[i], assigned_zones[i])
     else:
         print({present_workers[0]: ['AC']})
 
